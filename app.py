@@ -54,7 +54,7 @@ def get_table_page():
     date_str = request.args.get('date')
 
     table_path = os.path.join(DATA_DIR, airport, f'{pnmac_type}_tables', f'{date_str}.csv')
-
+ print(f"[DEBUG] Trying to read: {table_path}")  # 🐛 Add this line
     if not os.path.exists(table_path):
         return f"<h3>No data available for {date_str}</h3>", 404
 

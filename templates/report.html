@@ -3,14 +3,55 @@
 <head>
     <title>{{ airport }} {{ pnmac_type.replace('pnmac', 'PNMAC-') }} Report</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+        }
+        #dropdown-container {
+            text-align: right;
+            margin-bottom: 10px;
+        }
+        select {
+            padding: 5px;
+        }
+        table {
+            margin-top: 20px;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #999;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #eee;
+        }
+    </style>
 </head>
 <body>
     <h2>Report for {{ airport }} – {{ pnmac_type.replace('pnmac', 'PNMAC-') }}</h2>
 
+    <!-- Dropdown for Dates -->
+    <div id="dropdown-container">
+        <label for="day-select"><strong>View Daily Table:</strong></label>
+      <select id="day-select" onchange="redirectToTable(this.value)">
+    <option value="">-- Select a Date --</option>
+    {% for d in dates %}
+        <option value="{{ d }}">{{ d }}</option>
+    {% endfor %}
+</select>
+    </div>
+
+    <!-- Charts -->
     <canvas id="entryChart" width="800" height="300"></canvas>
     <canvas id="durationChart" width="800" height="300"></canvas>
 
-    <script>
+    <!-- Table Container -->
+    <div id="table-container"></div>
+
+        <script>
         const labels = {{ dates | tojson }};
         const entryData = {{ entries | tojson }};
         const durationData = {{ durations | tojson }};
@@ -43,5 +84,18 @@
             }
         });
     </script>
+
+    <script>
+        function redirectToTable(selectedDate) {
+            if (!selectedDate) return;
+
+            const airport = "{{ airport }}";
+            const pnmac = "{{ pnmac_type }}";
+
+            const url = `/get_table_page?airport=${airport}&pnmac_type=${pnmac}&date=${selectedDate}`;
+            window.open(url, '_blank');
+        }
+    </script>
 </body>
 </html>
+

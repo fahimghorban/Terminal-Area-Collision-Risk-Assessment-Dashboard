@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ airport }} {{ pnmac_type.replace('pnmac', 'PNMAC-') }} Report</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h2>Report for {{ airport }} – {{ pnmac_type.replace('pnmac', 'PNMAC-') }}</h2>
+
+    <canvas id="entryChart" width="800" height="300"></canvas>
+    <canvas id="durationChart" width="800" height="300"></canvas>
+
+    <script>
+        const labels = {{ dates | tojson }};
+        const entryData = {{ entries | tojson }};
+        const durationData = {{ durations | tojson }};
+        const pnmacLabel = "{{ pnmac_type.replace('pnmac', 'PNMAC-') }}";
+
+        const ctx1 = document.getElementById('entryChart').getContext('2d');
+        new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: pnmacLabel + ' Entries',
+                    data: entryData,
+                    backgroundColor: 'steelblue'
+                }]
+            }
+        });
+
+        const ctx2 = document.getElementById('durationChart').getContext('2d');
+        new Chart(ctx2, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Total CPA Duration (s) – ' + pnmacLabel,
+                    data: durationData,
+                    borderColor: 'crimson',
+                    fill: false
+                }]
+            }
+        });
+    </script>
+</body>
+</html>

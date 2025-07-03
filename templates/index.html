@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CPA Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f4f8fc;
+            color: #333;
+        }
+        h2 {
+            color: #004080;
+        }
+        p {
+            max-width: 800px;
+            line-height: 1.6;
+        }
+        form {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            width: 400px;
+        }
+        label {
+            display: block;
+            margin: 12px 0 6px;
+            font-weight: bold;
+        }
+        select, button {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+        button {
+            background-color: #0074D9;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #005fa3;
+        }
+    </style>
+</head>
+<body>
+    <h2>Welcome to the Airspace Collision Risk Assessment Dashboard</h2>
+    <p>
+        This tool visualizes projected near mid-air collisions (PNMAC) at major U.S. airports. It uses a projection method called
+        <strong>Projected Closest Point of Approach (P-CPA)</strong>, which estimates how close flights will get to one another in the future — rather than just their current proximity.
+    </p>
+    <p>
+        The safety metric is called <strong>Projected Near Mid-Air Collision (PNMAC)</strong>. We define three zones:
+        <ul>
+            <li><strong>PNMAC-1</strong>: T2CPA &lt; 30 sec, D@CPA &lt; 0.25 NM, Vertical &lt; 150 ft</li>
+            <li><strong>PNMAC-2</strong>: T2CPA &lt; 60 sec, D@CPA &lt; 0.5 NM, Vertical &lt; 250 ft</li>
+            <li><strong>PNMAC-3</strong>: T2CPA &lt; 90 sec, D@CPA &lt; 1 NM, Vertical &lt; 500 ft</li>
+        </ul>
+        Select an airport and a PNMAC zone below to view metrics and interactive reports.
+    </p>
+
+    <form action="/report" method="get">
+        <label for="airport">Select Airport:</label>
+        <select name="airport" id="airport">
+            {% for airport in airports %}
+            <option value="{{ airport }}">{{ airport }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="pnmac_type">Select PNMAC Zone:</label>
+        <select name="pnmac_type" id="pnmac_type">
+            <option value="pnmac1">PNMAC-1</option>
+            <option value="pnmac2">PNMAC-2</option>
+            <option value="pnmac3">PNMAC-3</option>
+        </select>
+
+        <button type="submit">View Report</button>
+    </form>
+</body>
+</html>

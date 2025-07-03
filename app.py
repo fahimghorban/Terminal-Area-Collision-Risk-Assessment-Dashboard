@@ -33,7 +33,7 @@ def report():
 @app.route('/get_table', methods=['GET'])
 def get_table():
     airport = request.args.get('airport')
-    pnmac_type = request.args.get('pnmac_type')
+    pnmac_type = request.args.get('pnmac_type').lower()  # ✅ Normalize case
     date_str = request.args.get('date')
 
     table_path = os.path.join(DATA_DIR, airport, f'{pnmac_type}_tables', f'{date_str}.csv')
@@ -50,17 +50,18 @@ def get_table():
 @app.route('/get_table_page')
 def get_table_page():
     airport = request.args.get('airport')
-    pnmac_type = request.args.get('pnmac_type')
+    pnmac_type = request.args.get('pnmac_type').lower()  # ✅ Force lowercase
     date_str = request.args.get('date')
 
     table_path = os.path.join(DATA_DIR, airport, f'{pnmac_type}_tables', f'{date_str}.csv')
-    print(f"[DEBUG] Trying to read: {table_path}")  # ✅ Fixed indentation
+    print(f"[DEBUG] Trying to read: {table_path}")
 
     if not os.path.exists(table_path):
         return f"<h3>No data available for {date_str}</h3>", 404
 
     df = pd.read_csv(table_path)
     return render_template('table_page.html', date=date_str, table=df.to_html(index=False))
+
 
 if __name__ == "__main__":
     app.run(debug=True)
